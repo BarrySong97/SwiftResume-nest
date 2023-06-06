@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule, loggingMiddleware } from 'nestjs-prisma';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppResolver } from './app.resolver';
 import { AuthModule } from 'src/auth/auth.module';
 import config from 'src/common/configs/config';
 import { LoggerModule } from 'nestjs-pino';
@@ -72,8 +73,9 @@ export function pinoHttpOption(): Options | DestinationStream {
       },
     }),
     AuthModule,
+    HabitsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppResolver],
 })
 export class AppModule {}

@@ -37,6 +37,19 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           ...payload,
+          role: 'USER',
+          habits: {
+            create: [
+              {
+                name: 'Drink Water',
+                order: 0,
+              },
+              {
+                name: 'Read',
+                order: 1,
+              },
+            ],
+          },
         },
       });
 

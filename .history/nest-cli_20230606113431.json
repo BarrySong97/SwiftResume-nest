@@ -4,7 +4,8 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "plugins": [
-      "@nestjs/swagger/plugin"
+      "@nestjs/swagger/plugin",
+      "@nestjs/graphql/plugin"
     ]
   }
 }

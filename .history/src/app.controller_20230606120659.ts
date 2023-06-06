@@ -1,25 +1,15 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import puppeteer from 'puppeteer';
 import { Pdf } from './common/models/pdf.model';
 import { Response } from 'express';
 
 async function convertHTMLtoPDF(htmlContent, outputPath) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
-  const pdfBuffer = await page.pdf({
-    format: 'A4',
-    displayHeaderFooter: false,
-    printBackground: true,
-    margin: {
-      top: '0.4in',
-      bottom: '0.4in',
-      left: '0.4in',
-      right: '0.4in',
-    },
-  });
+  await page.setContent(htmlContent);
+  const pdfBuffer = await page.pdf({ path: outputPath, format: 'A4' });
 
   await browser.close();
   return pdfBuffer;
