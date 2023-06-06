@@ -2,7 +2,7 @@ node_modules/
 dist/
 prisma/*.db
 coverage/
-
+.history
 .DS_Store
 
 prisma/migrations/dev/
