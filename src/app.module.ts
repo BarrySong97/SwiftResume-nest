@@ -9,6 +9,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { Options } from 'pino-http';
 import * as rfs from 'rotating-file-stream';
 import { DestinationStream } from 'pino';
+import { ResumeModule } from './resume/resume.module';
 const isDev = process.env.NODE_ENV === 'development';
 export function pinoHttpOption(): Options | DestinationStream {
   if (!isDev) {
@@ -72,6 +73,7 @@ export function pinoHttpOption(): Options | DestinationStream {
       },
     }),
     AuthModule,
+    ResumeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

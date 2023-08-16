@@ -1,23 +1,24 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import puppeteer from 'puppeteer';
-import { Pdf } from './common/models/pdf.model';
+import { PdfSetting } from './common/models/pdf-setting.model';
 import { Response } from 'express';
 
-async function convertHTMLtoPDF(htmlContent, outputPath) {
-  const browser = await puppeteer.launch({ headless: true });
+async function convertHTMLtoPDF(pdfSetting: PdfSetting) {
+  const { margin, template } = pdfSetting;
+  const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
-
-  await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+  const { left, top, right, bottom, unit } = margin;
+  await page.setContent(template);
   const pdfBuffer = await page.pdf({
     format: 'A4',
     displayHeaderFooter: false,
     printBackground: true,
     margin: {
-      top: '0.4in',
-      bottom: '0.4in',
-      left: '0.4in',
-      right: '0.4in',
+      top: `${top}${unit}`,
+      bottom: `${bottom}${unit}`,
+      left: `${left}${unit}`,
+      right: `${right}${unit}`,
     },
   });
 
@@ -31,8 +32,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('pdf')
-  async getPdf(@Body() pdf: Pdf, @Res() res: Response) {
-    const pdfBuffer = await convertHTMLtoPDF(pdf.template, 'test.pdf');
+  async getPdf(@Body() pdfSetting: PdfSetting, @Res() res: Response) {
+    const pdfBuffer = await convertHTMLtoPDF(pdfSetting);
     // 设置响应的内容类型为 PDF
     res.contentType('application/pdf');
 
