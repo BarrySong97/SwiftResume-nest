@@ -9,7 +9,7 @@ async function convertHTMLtoPDF(pdfSetting: PdfSetting) {
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
   const { left, top, right, bottom, unit } = margin;
-  await page.setContent(template);
+  await page.setContent(template, { waitUntil: 'networkidle0' });
   const pdfBuffer = await page.pdf({
     format: 'A4',
     displayHeaderFooter: false,
